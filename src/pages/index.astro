@@ -1,11 +1,21 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { ProductList } from '@/components';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { actions } from 'astro:actions';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+export const prerender = false;
+// este cambio en la sección 14 Actoion: Obtener productos por pagina
+//const { data: products, error } = await actions.getProductsByPage({});
+const { data, error } = await Astro.callAction(actions.getProductsByPage, {});
+
+if (error) {
+  return Astro.redirect('/');
+}
+
+const { products, totalPages } = data;
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<MainLayout>
+  <h1 class="text-3xl">Listado de Productos</h1>
+  <ProductList products={products} client:load />
+</MainLayout>
