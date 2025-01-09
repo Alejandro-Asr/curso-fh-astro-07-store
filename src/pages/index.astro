@@ -1,12 +1,19 @@
 ---
 import { ProductList } from '@/components';
+import Pagination from '@/components/shared/Pagination.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { actions } from 'astro:actions';
 
 export const prerender = false;
 // este cambio en la sección 14 Actoion: Obtener productos por pagina
 //const { data: products, error } = await actions.getProductsByPage({});
-const { data, error } = await Astro.callAction(actions.getProductsByPage, {});
+
+const searchParams = Astro.url.searchParams;
+const pageParams = Number(searchParams.get('page')) ?? 1;
+
+const { data, error } = await Astro.callAction(actions.getProductsByPage, {
+  page: pageParams,
+});
 
 if (error) {
   return Astro.redirect('/');
@@ -18,4 +25,5 @@ const { products, totalPages } = data;
 <MainLayout>
   <h1 class="text-3xl">Listado de Productos</h1>
   <ProductList products={products} client:load />
+  <Pagination totalPages={totalPages} />
 </MainLayout>
