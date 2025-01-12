@@ -33,7 +33,7 @@ export default defineConfig({
         }
 
         const { password: _, ...rest } = user;
-        console.log(rest);
+
         return rest;
       },
     }),

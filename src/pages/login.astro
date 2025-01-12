@@ -1,5 +1,6 @@
 ---
 import AuthLayout from '@/layouts/AuthLayout.astro';
+export const prerender = false;
 ---
 
 <AuthLayout>
@@ -109,8 +110,6 @@ import AuthLayout from '@/layouts/AuthLayout.astro';
       password: formData.get('password') as string,
       redirect: false,
     });
-
-    console.log({ resp });
 
     if (resp) {
       Swal.fire({
